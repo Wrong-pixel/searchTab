@@ -1,0 +1,170 @@
+html {
+  width: 300px;
+  overflow: hidden;
+}
+
+body {
+  width: 300px;
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.popup-root {
+  width: 300px;
+  padding: 20px;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.popup-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.popup-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.popup-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popup-label {
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.popup-kbd {
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  font: 600 12px/1.4 ui-monospace, 'SF Mono', monospace;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.popup-features {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popup-feature {
+  padding: 7px 12px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12.5px;
+  color: rgba(226, 232, 240, 0.65);
+}
+
+.popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.popup-btn {
+  width: 100%;
+  padding: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(226, 232, 240, 0.85);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.popup-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.popup-btn.primary {
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.18);
+  color: #c7d2fe;
+}
+
+.popup-btn.primary:hover {
+  background: rgba(99, 102, 241, 0.28);
+}
+
+@media (prefers-color-scheme: light) {
+  .popup-root {
+    background: #f8fafc;
+    color: #0f172a;
+  }
+
+  .popup-header {
+    border-bottom-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .popup-label {
+    color: rgba(15, 23, 42, 0.6);
+  }
+
+  .popup-kbd {
+    border-color: rgba(15, 23, 42, 0.1);
+    background: rgba(15, 23, 42, 0.04);
+    color: rgba(15, 23, 42, 0.8);
+  }
+
+  .popup-feature {
+    background: rgba(15, 23, 42, 0.03);
+    color: rgba(15, 23, 42, 0.6);
+  }
+
+  .popup-actions {
+    border-top-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .popup-btn {
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(15, 23, 42, 0.04);
+    color: rgba(15, 23, 42, 0.85);
+  }
+
+  .popup-btn:hover {
+    background: rgba(15, 23, 42, 0.08);
+  }
+
+  .popup-btn.primary {
+    border-color: rgba(79, 70, 229, 0.3);
+    background: rgba(79, 70, 229, 0.1);
+    color: #4338ca;
+  }
+
+  .popup-btn.primary:hover {
+    background: rgba(79, 70, 229, 0.18);
+  }
+}
