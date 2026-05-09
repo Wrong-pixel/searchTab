@@ -3,6 +3,8 @@ import { mountSpotlight } from '@/src/content/mountSpotlight'
 import type { RuntimeMessage } from '@/src/shared/messages'
 import '@/src/styles/spotlight.css'
 
+const STORAGE_KEY = 'pageContentSearchEnabled'
+
 export default defineContentScript({
   matches: ['<all_urls>'],
   main() {
@@ -17,7 +19,12 @@ export default defineContentScript({
       }
 
       if (message.type === 'REQUEST_PAGE_TEXT') {
-        sendPageText()
+        if (!isExtensionAlive()) return
+
+        chrome.storage.local.get(STORAGE_KEY, (result) => {
+          if (result[STORAGE_KEY] === false) return
+          sendPageText()
+        })
         return
       }
 
@@ -37,14 +44,18 @@ function isExtensionAlive() {
 }
 
 function schedulePageTextExtraction() {
-  const idleCallback = globalThis.requestIdleCallback
+  chrome.storage.local.get(STORAGE_KEY, (result) => {
+    if (result[STORAGE_KEY] === false) return
 
-  if (idleCallback) {
-    idleCallback(sendPageText, { timeout: 3000 })
-    return
-  }
+    const idleCallback = globalThis.requestIdleCallback
 
-  globalThis.setTimeout(sendPageText, 800)
+    if (idleCallback) {
+      idleCallback(sendPageText, { timeout: 3000 })
+      return
+    }
+
+    globalThis.setTimeout(sendPageText, 800)
+  })
 }
 
 function sendPageText() {

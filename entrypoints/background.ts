@@ -8,20 +8,7 @@ const injectedTabs = new Set<number>()
 const MAX_RESULTS = 12
 
 function tokenize(text: string): string[] {
-  const words = text.split(/[^a-zA-Z0-9\u4e00-\u9fff]+/).filter(Boolean)
-
-  if (text.length > 500) return words
-
-  const ngrams = new Set<string>()
-  for (const word of words) {
-    for (let len = 3; len <= 5; len++) {
-      for (let i = 0; i <= word.length - len; i++) {
-        ngrams.add(word.slice(i, i + len))
-      }
-    }
-  }
-
-  return [...words, ...ngrams]
+  return text.split(/[^a-zA-Z0-9\u4e00-\u9fff]+/).filter(Boolean)
 }
 
 const miniSearch = new MiniSearch<TabDocument>({
@@ -92,9 +79,17 @@ export default defineBackground(() => {
   })
 
   chrome.commands.onCommand.addListener((command) => {
-    if (command !== 'open-search') return
-
-    void openSpotlight()
+    switch (command) {
+      case 'open-search':
+        void openSpotlight()
+        break
+      case 'previous-tab':
+        void switchTab(-1)
+        break
+      case 'next-tab':
+        void switchTab(1)
+        break
+    }
   })
 
   chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendResponse) => {
@@ -111,11 +106,23 @@ export default defineBackground(() => {
 
     if (message.type === 'PAGE_TEXT_EXTRACTED') {
       const tabId = sender.tab?.id
-      if (tabId) updateTabText(tabId, message.text)
+      if (!tabId) return false
+
+      chrome.storage.local.get('pageContentSearchEnabled', (result) => {
+        if (result.pageContentSearchEnabled !== false) {
+          updateTabText(tabId, message.text)
+        }
+      })
       return false
     }
 
     return false
+  })
+
+  chrome.storage.onChanged.addListener((changes) => {
+    if (changes.pageContentSearchEnabled?.newValue === false) {
+      clearAllText()
+    }
   })
 
   void rebuildTabsIndex()
@@ -174,13 +181,30 @@ function updateTabText(tabId: number, text: string) {
   miniSearch.add(next)
 }
 
+function clearAllText() {
+  documents.forEach((doc) => {
+    if (!doc.text) return
+
+    miniSearch.remove(doc)
+
+    const next: TabDocument = {
+      ...doc,
+      text: undefined,
+      lastIndexedAt: Date.now(),
+    }
+
+    documents.set(doc.tabId, next)
+    miniSearch.add(next)
+  })
+}
+
 function searchTabs(query: string): SearchResult[] {
   const trimmed = query.trim()
 
   if (!trimmed) {
     return Array.from(documents.values())
       .sort((a, b) => b.lastAccessedAt - a.lastAccessedAt)
-      .slice(0, MAX_RESULTS)
+      .slice(0, 30)
       .map(toSearchResult)
   }
 
@@ -261,4 +285,22 @@ async function openSpotlight() {
 async function activateTab(tabId: number, windowId: number) {
   await chrome.windows.update(windowId, { focused: true })
   await chrome.tabs.update(tabId, { active: true })
+}
+
+async function switchTab(direction: -1 | 1) {
+  const [current] = await chrome.tabs.query({ active: true, currentWindow: true })
+  if (!current?.id) return
+
+  const allTabs = await chrome.tabs.query({ currentWindow: true })
+
+  const webTabs = allTabs.filter((t) => t.id !== undefined && isWebUrl(t.url))
+
+  const currentIndex = webTabs.findIndex((t) => t.id === current.id)
+  if (currentIndex === -1) return
+
+  const nextIndex = (currentIndex + direction + webTabs.length) % webTabs.length
+  const target = webTabs[nextIndex]
+  if (!target?.id) return
+
+  await chrome.tabs.update(target.id, { active: true })
 }

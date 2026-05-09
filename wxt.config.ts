@@ -24,6 +24,10 @@ export default defineConfig({
       48: 'icon.png',
       128: 'icon.png',
     },
+    options_ui: {
+      page: 'options.html',
+      open_in_tab: true,
+    },
     action: {
       default_popup: 'popup.html',
       default_title: 'SearchTab',
@@ -35,6 +39,20 @@ export default defineConfig({
           mac: 'Command+Shift+Space',
         },
         description: '打开标签页搜索',
+      },
+      'previous-tab': {
+        suggested_key: {
+          default: 'Ctrl+Shift+Left',
+          mac: 'Command+Shift+Left',
+        },
+        description: '切换到上一个标签页',
+      },
+      'next-tab': {
+        suggested_key: {
+          default: 'Ctrl+Shift+Right',
+          mac: 'Command+Shift+Right',
+        },
+        description: '切换到下一个标签页',
       },
     },
   },
