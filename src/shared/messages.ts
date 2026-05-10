@@ -5,6 +5,7 @@ export type RuntimeMessage =
   | { type: 'REQUEST_PAGE_TEXT' }
   | { type: 'SEARCH_TABS'; query: string }
   | { type: 'ACTIVATE_TAB'; tabId: number; windowId: number }
+  | { type: 'CLOSE_TAB'; tabId: number }
   | { type: 'PAGE_TEXT_EXTRACTED'; text: string }
 
 export type SearchTabsResponse = {

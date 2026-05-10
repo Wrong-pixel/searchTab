@@ -99,6 +99,15 @@ export function Spotlight({ onClose }: SpotlightProps) {
     })
   }
 
+  function closeTab(result: SearchResult) {
+    chrome.runtime.sendMessage({
+      type: 'CLOSE_TAB',
+      tabId: result.tabId,
+    } satisfies RuntimeMessage)
+
+    setResults((prev) => prev.filter((r) => r.tabId !== result.tabId || r.windowId !== result.windowId))
+  }
+
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.nativeEvent.isComposing || composingRef.current) return
 
@@ -124,6 +133,7 @@ export function Spotlight({ onClose }: SpotlightProps) {
       const selected = normalizedResults[selectedIndex]
       if (selected) activate(selected)
     }
+
   }
 
   function onCompositionStart() {
@@ -186,8 +196,13 @@ export function Spotlight({ onClose }: SpotlightProps) {
             <button
               key={`${result.windowId}-${result.tabId}`}
               className={index === selectedIndex ? 'st-item active' : 'st-item'}
-              onMouseEnter={() => setSelectedIndex(index)}
+              onMouseMove={() => {
+                if (selectedIndex !== index) setSelectedIndex(index)
+              }}
               onMouseDown={(event) => {
+                const target = event.target as Element
+                if (target.closest('.st-close')) return
+
                 event.preventDefault()
                 activate(result)
               }}
@@ -206,7 +221,16 @@ export function Spotlight({ onClose }: SpotlightProps) {
                 <span className="st-url">{formatUrl(result.url)}</span>
               </span>
 
-              <span className="st-return">↵</span>
+              <span
+                className="st-close"
+                onClick={(event) => {
+                  event.stopPropagation()
+                  event.preventDefault()
+                  closeTab(result)
+                }}
+              >
+                ×
+              </span>
             </button>
           ))}
 

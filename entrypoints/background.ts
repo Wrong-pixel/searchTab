@@ -104,6 +104,11 @@ export default defineBackground(() => {
       return false
     }
 
+    if (message.type === 'CLOSE_TAB') {
+      void chrome.tabs.remove(message.tabId)
+      return false
+    }
+
     if (message.type === 'PAGE_TEXT_EXTRACTED') {
       const tabId = sender.tab?.id
       if (!tabId) return false
