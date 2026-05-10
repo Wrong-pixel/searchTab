@@ -22,6 +22,7 @@ export default defineContentScript({
         if (!isExtensionAlive()) return
 
         chrome.storage.local.get(STORAGE_KEY, (result) => {
+          if (!isExtensionAlive()) return
           if (result[STORAGE_KEY] === false) return
           sendPageText()
         })
@@ -44,7 +45,10 @@ function isExtensionAlive() {
 }
 
 function schedulePageTextExtraction() {
+  if (!isExtensionAlive()) return
+
   chrome.storage.local.get(STORAGE_KEY, (result) => {
+    if (!isExtensionAlive()) return
     if (result[STORAGE_KEY] === false) return
 
     const idleCallback = globalThis.requestIdleCallback
