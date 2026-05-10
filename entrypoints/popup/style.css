@@ -134,6 +134,23 @@ body {
   background: rgba(99, 102, 241, 0.28);
 }
 
+.popup-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.popup-footer a {
+  color: rgba(226, 232, 240, 0.35);
+  font-size: 11px;
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.popup-footer a:hover {
+  color: rgba(226, 232, 240, 0.6);
+}
+
 @media (prefers-color-scheme: light) {
   .popup-root {
     background: #f8fafc;
@@ -185,5 +202,13 @@ body {
 
   .popup-btn.primary:hover {
     background: rgba(79, 70, 229, 0.18);
+  }
+
+  .popup-footer a {
+    color: rgba(15, 23, 42, 0.3);
+  }
+
+  .popup-footer a:hover {
+    color: rgba(15, 23, 42, 0.55);
   }
 }

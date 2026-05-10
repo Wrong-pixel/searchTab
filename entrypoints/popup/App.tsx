@@ -18,7 +18,7 @@ function PopupApp() {
   }, [])
 
   const openOptions = () => {
-    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') })
+    chrome.tabs.create({ url: chrome.runtime.getURL('settings.html') })
   }
 
   const openOnboarding = () => {
@@ -68,6 +68,16 @@ function PopupApp() {
         <button className="popup-btn" onClick={openOnboarding}>
           关于
         </button>
+      </div>
+
+      <div className="popup-footer">
+        <a
+          href="https://github.com/Wrong-pixel/searchTab"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
       </div>
     </div>
   )

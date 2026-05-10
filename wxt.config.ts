@@ -24,10 +24,6 @@ export default defineConfig({
       48: 'icon.png',
       128: 'icon.png',
     },
-    options_ui: {
-      page: 'options.html',
-      open_in_tab: true,
-    },
     action: {
       default_popup: 'popup.html',
       default_title: 'SearchTab',
