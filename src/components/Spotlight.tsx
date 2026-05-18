@@ -217,8 +217,10 @@ export function Spotlight({ onClose }: SpotlightProps) {
               </span>
 
               <span className="st-main">
-                <span className="st-title">{result.title || result.hostname || '未命名'}</span>
-                <span className="st-url">{formatUrl(result.url)}</span>
+                <span className="st-title">
+                  {highlightMatch(result.title || result.hostname || '未命名', query)}
+                </span>
+                <span className="st-url">{highlightMatch(formatUrl(result.url), query)}</span>
               </span>
 
               <span
@@ -236,6 +238,21 @@ export function Spotlight({ onClose }: SpotlightProps) {
 
           {!normalizedResults.length && (
             <div className="st-empty">
+              <svg
+                className="st-empty-icon"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
               <span>没有找到匹配的标签页</span>
               <small>试试搜索标题、域名、URL 或页面正文内容</small>
             </div>
@@ -253,4 +270,16 @@ function formatUrl(url: string) {
   } catch {
     return url
   }
+}
+
+function highlightMatch(text: string, query: string): React.ReactNode {
+  if (!query.trim()) return text
+
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`(${escaped})`, 'gi')
+  const parts = text.split(regex)
+
+  return parts.map((part, i) =>
+    regex.test(part) ? <mark key={i} className="st-highlight">{part}</mark> : part,
+  )
 }

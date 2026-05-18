@@ -272,17 +272,21 @@ async function openSpotlight() {
       if (injectedTabs.has(tab.id!)) return
       injectedTabs.add(tab.id!)
 
-      await chrome.scripting.executeScript({
-        target: { tabId: tab.id! },
-        files: ['/content-scripts/content.js'],
-      })
+      try {
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id! },
+          files: ['/content-scripts/content.js'],
+        })
 
-      await chrome.scripting.insertCSS({
-        target: { tabId: tab.id! },
-        files: ['/content-scripts/content.css'],
-      })
+        await chrome.scripting.insertCSS({
+          target: { tabId: tab.id! },
+          files: ['/content-scripts/content.css'],
+        })
 
-      await chrome.tabs.sendMessage(tab.id!, { type: 'OPEN_SPOTLIGHT' })
+        await chrome.tabs.sendMessage(tab.id!, { type: 'OPEN_SPOTLIGHT' })
+      } catch {
+        injectedTabs.delete(tab.id!)
+      }
     })
   }
 }

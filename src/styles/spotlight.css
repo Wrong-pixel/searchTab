@@ -201,6 +201,10 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+.st-item.active {
+  box-shadow: inset 2px 0 0 0 rgba(129, 140, 248, 0.85);
+}
+
 .st-item.active .st-return,
 .st-item:hover .st-return {
   opacity: 1;
@@ -254,6 +258,12 @@
   font-size: 12.5px;
 }
 
+.st-highlight {
+  background: rgba(250, 204, 21, 0.28);
+  color: inherit;
+  border-radius: 3px;
+}
+
 .st-empty {
   display: flex;
   min-height: 150px;
@@ -267,6 +277,12 @@
 .st-empty small {
   color: rgba(255, 255, 255, 0.38);
   font-size: 12px;
+}
+
+.st-empty-icon {
+  color: rgba(255, 255, 255, 0.16);
+  margin-bottom: 4px;
+  flex-shrink: 0;
 }
 
 @keyframes st-fade-in {
@@ -318,6 +334,10 @@
     background: rgba(15, 23, 42, 0.07);
   }
 
+  .st-item.active {
+    box-shadow: inset 2px 0 0 0 rgba(99, 102, 241, 0.65);
+  }
+
   .st-title {
     color: rgba(15, 23, 42, 0.94);
   }
@@ -329,8 +349,16 @@
     color: rgba(15, 23, 42, 0.46);
   }
 
+  .st-highlight {
+    background: rgba(234, 179, 8, 0.24);
+  }
+
   .st-empty {
     color: rgba(15, 23, 42, 0.7);
+  }
+
+  .st-empty-icon {
+    color: rgba(15, 23, 42, 0.12);
   }
 
   .st-favicon-wrap,
